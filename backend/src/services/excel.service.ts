@@ -3,19 +3,18 @@ import path from "path";
 import fs from "fs";
 
 export const readPortFolioExcel = () => {
-    // const filePath = path.join(
-    //     process.cwd(),
-    //     "data",
-    //     "A9047AE6.xlsx"
-    // );
-
     const filePath = path.join(
         process.cwd(),
-        "backend",
         "data",
         "A9047AE6.xlsx"
     );
 
+    // const filePath = path.join(
+    //     process.cwd(),
+    //     "backend",
+    //     "data",
+    //     "A9047AE6.xlsx"
+    // );
 
     console.log("process.cwd():", process.cwd());
     console.log("Excel file path:", filePath);
