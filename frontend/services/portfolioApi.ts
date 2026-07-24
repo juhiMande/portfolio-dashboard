@@ -1,27 +1,32 @@
 import { PortfolioResponse } from "@/types/portfolio";
 
-const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL ||
-    "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function getPortfolio():
-    Promise<PortfolioResponse> {
+export async function getPortfolio() {
+  console.log("API URL:", API_URL);
 
-    const response = await fetch(
-        `${API_BASE_URL}/api/portfolio`,
-        {
-            cache: "no-store",
-        }
+  if (!API_URL) {
+    throw new Error("NEXT_PUBLIC_API_URL is not configured");
+  }
+
+  const url = `${API_URL}/api/portfolio`;
+
+  console.log("Fetching portfolio from:", url);
+
+  const response = await fetch(url, {
+    cache: "no-store",
+  });
+
+  console.log("Portfolio API status:", response.status);
+
+  if (!response.ok) {
+    const body = await response.text();
+    console.error("Portfolio API error:", response.status, body);
+
+    throw new Error(
+      `Portfolio API failed: ${response.status} ${body}`
     );
+  }
 
-    if (!response.ok) {
-        throw new Error(
-            `Failed to load portfolio: ${response.status}`
-        );
-    }
-
-    const data: PortfolioResponse =
-        await response.json();
-
-    return data;
+  return response.json();
 }
