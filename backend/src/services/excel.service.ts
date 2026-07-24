@@ -9,6 +9,7 @@ export const readPortFolioExcel = () => {
         "A9047AE6.xlsx"
     );
 
+    console.log("process.cwd():", process.cwd());
     console.log("Excel file path:", filePath);
     console.log("Excel exists:", fs.existsSync(filePath));
 
