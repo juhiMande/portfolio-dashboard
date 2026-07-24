@@ -1,38 +1,49 @@
 import * as XLSX from "xlsx";
 import path from "path";
+import fs from "fs";
 
 export const readPortFolioExcel = () => {
-    // Excel File Location
     const filePath = path.join(
         process.cwd(),
         "data",
-        'A9047AE6.xlsx'
+        "A9047AE6.xlsx"
     );
 
-    // Read Excel WorkBook
-    const workbook = XLSX.readFile(filePath);
+    console.log("Excel file path:", filePath);
+    console.log("Excel exists:", fs.existsSync(filePath));
 
-    // Get First Sheet Name
+    if (!fs.existsSync(filePath)) {
+        throw new Error(
+            `Portfolio Excel file not found: ${filePath}`
+        );
+    }
+
+    const fileBuffer = fs.readFileSync(filePath);
+
+    const workbook = XLSX.read(fileBuffer, {
+        type: "buffer",
+    });
+
     const sheetName = workbook.SheetNames[0];
 
     if (!sheetName) {
         throw new Error("No WorkSheet Found in Excel File");
     }
 
-    // Get First WorkSheet
     const worksheet = workbook.Sheets[sheetName];
 
     if (!worksheet) {
-        throw new Error(`Worksheet "${sheetName}" could not be read.`);
+        throw new Error(
+            `Worksheet "${sheetName}" could not be read.`
+        );
     }
 
-
-    // Convert Excel rows to JSON
-    const rows = XLSX.utils.sheet_to_json<unknown[]>(worksheet, {
-        header: 1,
-        defval: null,
-        raw: true,
-    });
-
-    return rows;
-}
+    return XLSX.utils.sheet_to_json<unknown[]>(
+        worksheet,
+        {
+            header: 1,
+            defval: null,
+            raw: true,
+        }
+    );
+};
