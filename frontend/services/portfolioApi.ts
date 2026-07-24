@@ -1,15 +1,23 @@
 import { PortfolioResponse } from "@/types/portfolio";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function getPortfolio():
-    Promise<PortfolioResponse> {
+export async function getPortfolio(): Promise<PortfolioResponse> {
 
-    const response = await fetch(
-        `${API_BASE_URL}/api/portfolio`,
-        {
-            cache: "no-store",
-        }
+    console.log("NEXT_PUBLIC_API_URL:", API_BASE_URL);
+
+    const url = `${API_BASE_URL}/api/portfolio`;
+
+    console.log("Fetching portfolio from:", url);
+
+    const response = await fetch(url, {
+        cache: "no-store",
+    });
+
+    console.log("Portfolio API status:", response.status);
+    console.log(
+        "Portfolio content-type:",
+        response.headers.get("content-type")
     );
 
     if (!response.ok) {
@@ -18,8 +26,7 @@ export async function getPortfolio():
         );
     }
 
-    const data: PortfolioResponse =
-        await response.json();
+    const data: PortfolioResponse = await response.json();
 
     return data;
 }
