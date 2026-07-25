@@ -1,6 +1,4 @@
-export function parseFinancialNumber(
-    value: string | undefined
-): number | null {
+export function parseFinancialNumber(value: string | undefined): number | null {
 
     if (!value) {
         return null;
@@ -13,7 +11,5 @@ export function parseFinancialNumber(
 
     const parsed = Number(cleaned);
 
-    return Number.isFinite(parsed)
-        ? parsed
-        : null;
+    return Number.isFinite(parsed) ? parsed : null;
 }

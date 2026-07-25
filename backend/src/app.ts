@@ -20,11 +20,9 @@ app.get("/health", (req, res) => {
 app.use("/api/portfolio", portfolioRoutes);
 
 app.get("/api/test-market", async (req, res) => {
-    const yahooSymbol =
-        getYahooSymbol("HDFCBANK", "NSE");
+    const yahooSymbol = getYahooSymbol("HDFCBANK", "NSE");
 
-    const cmp =
-        await getCurrentPrice(yahooSymbol);
+    const cmp = await getCurrentPrice(yahooSymbol);
 
     res.json({
         stock: "HDFC Bank",
@@ -36,11 +34,9 @@ app.get("/api/test-market", async (req, res) => {
 });
 
 app.get("/api/test-google", async (req, res) => {
-    const googleSymbol =
-        getGoogleSymbol("HDFCBANK", "NSE");
+    const googleSymbol = getGoogleSymbol("HDFCBANK", "NSE");
 
-    const fundamentals =
-        await getFundamentals(googleSymbol);
+    const fundamentals = await getFundamentals(googleSymbol);
 
     res.json({
         stock: "HDFC Bank",

@@ -7,10 +7,7 @@ import { getFundamentals } from "./google-finance.service";
 import { getYahooSymbol } from "../utils/market-symbol.util";
 import { getGoogleSymbol } from "../utils/google-symbol.util";
 
-import {
-    calculatePortfolioSummary,
-    calculateSectorSummaries,
-} from "./portfolio-summary.service";
+import { calculatePortfolioSummary, calculateSectorSummaries, } from "./portfolio-summary.service";
 
 import { PortfolioResponse } from "../types/sector.types";
 
@@ -133,19 +130,12 @@ export const getPortfolioStocks = (): Stock[] => {
 
     // Portfolio-level calculation
 
-    const totalInvestment = stocks.reduce(
-        (total, stock) => total + stock.investment,
-        0
-    );
+    const totalInvestment = stocks.reduce((total, stock) => total + stock.investment, 0);
 
     // Calculate percentage after total is known
 
     for (const stock of stocks) {
-
-        stock.portfolioPercentage =
-            totalInvestment > 0
-                ? (stock.investment / totalInvestment) * 100
-                : 0;
+        stock.portfolioPercentage = totalInvestment > 0 ? (stock.investment / totalInvestment) * 100 : 0;
     }
 
 
@@ -194,37 +184,26 @@ export const getPortfolioWithMarketData = async (): Promise<Stock[]> => {
                     ]);
 
                     console.log("MARKET RESULT:", {
-    stock: stock.particulars,
-    yahooSymbol,
-    cmp,
-    peRatio: fundamentals.peRatio,
-    latestEarnings: fundamentals.latestEarnings,
-});
+                        stock: stock.particulars,
+                        yahooSymbol,
+                        cmp,
+                        peRatio: fundamentals.peRatio,
+                        latestEarnings: fundamentals.latestEarnings,
+                    });
 
-                    const presentValue =
-                        cmp !== null
-                            ? cmp * stock.quantity
-                            : null;
+                    const presentValue = cmp !== null
+                        ? cmp * stock.quantity
+                        : null;
 
-                    const gainLoss =
-                        presentValue !== null
-                            ? presentValue - stock.investment
-                            : null;
+                    const gainLoss = presentValue !== null
+                        ? presentValue - stock.investment
+                        : null;
 
-                    let marketDataStatus:
-                        "AVAILABLE" | "PARTIAL" | "UNAVAILABLE";
+                    let marketDataStatus: "AVAILABLE" | "PARTIAL" | "UNAVAILABLE";
 
-                    if (
-                        cmp !== null &&
-                        fundamentals.peRatio !== null &&
-                        fundamentals.latestEarnings !== null
-                    ) {
+                    if (cmp !== null && fundamentals.peRatio !== null && fundamentals.latestEarnings !== null) {
                         marketDataStatus = "AVAILABLE";
-                    } else if (
-                        cmp !== null ||
-                        fundamentals.peRatio !== null ||
-                        fundamentals.latestEarnings !== null
-                    ) {
+                    } else if (cmp !== null || fundamentals.peRatio !== null || fundamentals.latestEarnings !== null) {
                         marketDataStatus = "PARTIAL";
                     } else {
                         marketDataStatus = "UNAVAILABLE";
@@ -244,10 +223,7 @@ export const getPortfolioWithMarketData = async (): Promise<Stock[]> => {
                     };
 
                 } catch (error) {
-                    console.error(
-                        `Market data processing failed for ${stock.particulars}:`,
-                        error
-                    );
+                    console.error(`Market data processing failed for ${stock.particulars}:`, error);
 
                     return {
                         ...stock,
@@ -269,17 +245,13 @@ export const getPortfolioWithMarketData = async (): Promise<Stock[]> => {
     return stocksWithMarketData;
 };
 
-export const getPortfolioDashboard =
-    async (): Promise<PortfolioResponse> => {
+export const getPortfolioDashboard = async (): Promise<PortfolioResponse> => {
 
-    const stocks =
-        await getPortfolioWithMarketData();
+    const stocks = await getPortfolioWithMarketData();
 
-    const summary =
-        calculatePortfolioSummary(stocks);
+    const summary = calculatePortfolioSummary(stocks);
 
-    const sectors =
-        calculateSectorSummaries(stocks);
+    const sectors = calculateSectorSummaries(stocks);
 
     return {
         stocks,

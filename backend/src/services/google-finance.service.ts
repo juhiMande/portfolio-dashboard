@@ -7,29 +7,21 @@ interface FundamentalsCacheEntry {
     timestamp: number;
 }
 
-const fundamentalsCache =
-    new Map<string, FundamentalsCacheEntry>();
+const fundamentalsCache = new Map<string, FundamentalsCacheEntry>();
 
-const FUNDAMENTALS_CACHE_TTL =
-    60 * 60 * 1000;
+const FUNDAMENTALS_CACHE_TTL = 60 * 60 * 1000;
 
-export async function getFundamentals(
-    googleSymbol: string
-): Promise<StockFundamentals> {
+export async function getFundamentals(googleSymbol: string): Promise<StockFundamentals> {
 
-    const cachedEntry =
-        fundamentalsCache.get(googleSymbol);
+    const cachedEntry = fundamentalsCache.get(googleSymbol);
 
     if (cachedEntry) {
 
-        const cacheAge =
-            Date.now() - cachedEntry.timestamp;
+        const cacheAge = Date.now() - cachedEntry.timestamp;
 
         if (cacheAge < FUNDAMENTALS_CACHE_TTL) {
 
-            console.log(
-                `Google Cache HIT: ${googleSymbol}`
-            );
+            console.log(`Google Cache HIT: ${googleSymbol}`);
 
             return cachedEntry.data;
         }
@@ -37,9 +29,7 @@ export async function getFundamentals(
         fundamentalsCache.delete(googleSymbol);
     }
 
-    console.log(
-        `Google Cache MISS: ${googleSymbol}`
-    );
+    console.log(`Google Cache MISS: ${googleSymbol}`);
 
     try {
 
@@ -58,15 +48,10 @@ export async function getFundamentals(
 
         const bodyText = $("body").text();
 
-        console.log(
-            "Has P/E ratio:",
-            bodyText.includes("P/E ratio")
-        );
+        console.log("Has P/E ratio:", bodyText.includes("P/E ratio"));
 
         // Parsing comes next.
-        console.log(
-            `Google Finance page loaded: ${googleSymbol}`
-        );
+        console.log(`Google Finance page loaded: ${googleSymbol}`);
 
         return {
             peRatio: null,
@@ -75,13 +60,10 @@ export async function getFundamentals(
 
     } catch (error) {
 
-        console.error(
-            `Google Finance error for ${googleSymbol}:`,
-            error
-        );
+        console.error(`Google Finance error for ${googleSymbol}:`, error);
 
         return {
-             peRatio: null,
+            peRatio: null,
             latestEarnings: null,
         };
     }
