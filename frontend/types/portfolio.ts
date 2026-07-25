@@ -21,16 +21,15 @@ export interface Stock {
     sector: string;
 
     marketDataStatus:
-        | "AVAILABLE"
-        | "PARTIAL"
-        | "UNAVAILABLE";
+    | "AVAILABLE"
+    | "PARTIAL"
+    | "UNAVAILABLE";
 }
 
 export interface PortfolioSummary {
     totalInvestment: number;
     totalPresentValue: number;
     totalGainLoss: number;
-
     totalStocks: number;
     stocksWithMarketData: number;
 }

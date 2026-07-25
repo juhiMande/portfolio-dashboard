@@ -1,127 +1,86 @@
 import { SectorSummary as SectorSummaryType } from "@/types/portfolio";
 
 interface SectorSummaryProps {
-    sectors: SectorSummaryType[];
+  sectors: SectorSummaryType[];
 }
 
-const formatCurrency = (
-    value: number
-): string => {
-    return new Intl.NumberFormat("en-IN", {
-        style: "currency",
-        currency: "INR",
-        maximumFractionDigits: 2,
-    }).format(value);
+const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 2,
+  }).format(value);
 };
 
-const getGainLossClass = (
-    gainLoss: number
-): string => {
-    if (gainLoss > 0) {
-        return "sector-positive";
-    }
+const getGainLossClass = (gainLoss: number): string => {
+  if (gainLoss > 0) {
+    return "sector-positive";
+  }
 
-    if (gainLoss < 0) {
-        return "sector-negative";
-    }
+  if (gainLoss < 0) {
+    return "sector-negative";
+  }
 
-    return "sector-neutral";
+  return "sector-neutral";
 };
 
-export default function SectorSummary({
-    sectors,
-}: SectorSummaryProps) {
-    return (
-        <section className="sector-summary-section">
-            <div className="section-heading">
+export default function SectorSummary({ sectors }: SectorSummaryProps) {
+  return (
+    <section className="sector-summary-section">
+      <div className="section-heading">
+        <div>
+          <p className="section-label">Allocation</p>
+
+          <h2>Sector Summary</h2>
+        </div>
+
+        <p className="sector-count">{sectors.length} sectors</p>
+      </div>
+
+      {sectors.length === 0 ? (
+        <div className="sector-empty-state">No sector data available.</div>
+      ) : (
+        <div className="sector-grid">
+          {sectors.map((sector) => (
+            <article className="sector-card" key={sector.sector}>
+              <div className="sector-card-header">
                 <div>
-                    <p className="section-label">
-                        Allocation
-                    </p>
+                  <h3>{sector.sector}</h3>
 
-                    <h2>Sector Summary</h2>
+                  <p>
+                    {sector.stockCount}{" "}
+                    {sector.stockCount === 1 ? "stock" : "stocks"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="sector-values">
+                <div className="sector-value-row">
+                  <span>Investment</span>
+
+                  <strong>{formatCurrency(sector.totalInvestment)}</strong>
                 </div>
 
-                <p className="sector-count">
-                    {sectors.length} sectors
-                </p>
-            </div>
+                <div className="sector-value-row">
+                  <span>Present Value</span>
 
-            {sectors.length === 0 ? (
-                <div className="sector-empty-state">
-                    No sector data available.
+                  <strong>{formatCurrency(sector.totalPresentValue)}</strong>
                 </div>
-            ) : (
-                <div className="sector-grid">
-                    {sectors.map((sector) => (
-                        <article
-                            className="sector-card"
-                            key={sector.sector}
-                        >
-                            <div className="sector-card-header">
-                                <div>
-                                    <h3>
-                                        {sector.sector}
-                                    </h3>
 
-                                    <p>
-                                        {sector.stockCount}{" "}
-                                        {sector.stockCount === 1
-                                            ? "stock"
-                                            : "stocks"}
-                                    </p>
-                                </div>
-                            </div>
+                <div className="sector-value-row">
+                  <span>Gain / Loss</span>
 
-                            <div className="sector-values">
-                                <div className="sector-value-row">
-                                    <span>
-                                        Investment
-                                    </span>
+                  <strong className={getGainLossClass(sector.totalGainLoss)}>
+                    {sector.totalGainLoss > 0 ? "+" : ""}
 
-                                    <strong>
-                                        {formatCurrency(
-                                            sector.totalInvestment
-                                        )}
-                                    </strong>
-                                </div>
-
-                                <div className="sector-value-row">
-                                    <span>
-                                        Present Value
-                                    </span>
-
-                                    <strong>
-                                        {formatCurrency(
-                                            sector.totalPresentValue
-                                        )}
-                                    </strong>
-                                </div>
-
-                                <div className="sector-value-row">
-                                    <span>
-                                        Gain / Loss
-                                    </span>
-
-                                    <strong
-                                        className={getGainLossClass(
-                                            sector.totalGainLoss
-                                        )}
-                                    >
-                                        {sector.totalGainLoss > 0
-                                            ? "+"
-                                            : ""}
-
-                                        {formatCurrency(
-                                            sector.totalGainLoss
-                                        )}
-                                    </strong>
-                                </div>
-                            </div>
-                        </article>
-                    ))}
+                    {formatCurrency(sector.totalGainLoss)}
+                  </strong>
                 </div>
-            )}
-        </section>
-    );
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  );
 }
