@@ -77,3 +77,19 @@ portfolio-dashboard/
 │   └── package.json
 │
 └── README.md
+```
+
+## External Data Source Limitations
+
+Yahoo Finance does not provide an official public API for this
+use case. This project uses the `yahoo-finance2` library to retrieve
+market prices.
+
+Google Finance also does not expose an official public API for
+the required fundamentals, so the backend retrieves and parses
+publicly available Google Finance pages.
+
+Because these sources are unofficial, responses may occasionally
+be unavailable or change structure. The application therefore
+implements caching, concurrency limiting and graceful fallback
+handling.

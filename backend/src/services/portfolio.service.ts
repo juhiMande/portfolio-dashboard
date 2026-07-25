@@ -77,12 +77,14 @@ export const getPortfolioStocks = (): Stock[] => {
         const serialNumber = row[0];
         const particulars = row[1];
 
+        
+
         if (serialNumber === null && typeof particulars === "string" && particulars.trim() !== "") {
             currentSector = particulars.trim();
             continue;
         }
 
-        if (typeof serialNumber !== "number") {
+        if (typeof serialNumber !== "number" || serialNumber < 1) {
             continue;
         }
 

@@ -40,8 +40,9 @@ export async function getCurrentPrice(symbol: string): Promise<number | null> {
 
         const price = quote.regularMarketPrice;
 
-        if (typeof price !== "number") {
-            console.warn(`CMP not available for ${symbol}`);
+        if (typeof price !== "number" || !Number.isFinite(price) || price <= 0) {
+            console.warn(`Invalid CMP received for ${symbol}:`, price);
+
             return null;
         }
 
